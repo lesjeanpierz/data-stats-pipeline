@@ -1,5 +1,6 @@
 import requests
 import pandas as pd
+from pathlib import Path
 
 # === Téléchargement automatique du fichier depuis le site de l'INSEE ===
 url = "https://www.insee.fr/fr/statistiques/fichier/8574712/t_2101.xlsx"
