@@ -20,7 +20,7 @@ else:
 df = pd.read_excel(file_path, sheet_name="T_2101", header=5)
 
 # Récupérer la ligne des années (ligne 3)
-years_row = pd.read_excel("t_2101.xlsx", sheet_name="T_2101", header=None, skiprows=3, nrows=1)
+years_row = pd.read_excel(file_path, sheet_name="T_2101", header=None, skiprows=3, nrows=1)
 years = years_row.iloc[0, 2:].dropna().astype(int).tolist()
 
 # Remplacer les noms de colonnes par les années
