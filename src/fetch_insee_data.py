@@ -17,7 +17,7 @@ else:
     print("Fichier déjà présent :", file_path)
 
 # === Lecture propre du fichier ===
-df = pd.read_excel("t_2101.xlsx", sheet_name="T_2101", header=5)
+df = pd.read_excel(file_path, sheet_name="T_2101", header=5)
 
 # Récupérer la ligne des années (ligne 3)
 years_row = pd.read_excel("t_2101.xlsx", sheet_name="T_2101", header=None, skiprows=3, nrows=1)
