@@ -29,7 +29,7 @@ spec:
             steps {
                 container('python') {
                     sh '''
-                    pip install pandas openpyxl matplotlib
+                    pip install pandas openpyxl matplotlib requests
                     python src/fetch_insee_data.py
                     '''
                 }
