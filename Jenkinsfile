@@ -35,6 +35,24 @@ spec:
                 }
             }
         }
+
+        stage('Commit & Push results') {
+            steps {
+                sh """
+                    git config user.email "jenkins-bot@yourdomain.com"
+                    git config user.name "Jenkins Bot"
+
+                    git add revenu_disponible_brut.png revenu_disponible_brut.xlsx
+
+                    git commit -m "Mise à jour automatique des fichiers générés par Jenkins" || echo "Rien à commit"
+
+                    git push origin HEAD:${BRANCH_NAME}
+                """
+            }
+        }
+    }
+}
+
     }
 }
 
