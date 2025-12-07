@@ -6,13 +6,13 @@ pipeline {
 
     agent {
         kubernetes {
-            label 'python-agent'
             yaml """
 apiVersion: v1
 kind: Pod
 spec:
   workspaceVolume:
     emptyDirWorkspaceVolume: {}
+
   containers:
   - name: python
     image: python:3.12
@@ -54,9 +54,6 @@ spec:
                         withCredentials([string(credentialsId: 'github-pat', variable: 'GITHUB_TOKEN')]) {
 
                             sh '''
-                                echo "Git directory:"
-                                ls -la .git
-
                                 git config user.name "jenkins-bot"
                                 git config user.email "jenkins-bot@example.com"
 
