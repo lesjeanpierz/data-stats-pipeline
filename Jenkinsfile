@@ -1,4 +1,9 @@
 pipeline {
+
+    options {
+        skipDefaultCheckout(true)
+    }
+
     agent {
         kubernetes {
             label 'python-agent'
@@ -8,7 +13,6 @@ kind: Pod
 spec:
   workspaceVolume:
     emptyDirWorkspaceVolume: {}
-
   containers:
   - name: python
     image: python:3.12
@@ -51,7 +55,7 @@ spec:
 
                             sh '''
                                 echo "Git directory:"
-                                ls -la .git || echo "Pas de .git ici !"
+                                ls -la .git
 
                                 git config user.name "jenkins-bot"
                                 git config user.email "jenkins-bot@example.com"
