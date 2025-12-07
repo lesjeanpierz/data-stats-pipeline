@@ -12,7 +12,6 @@ kind: Pod
 spec:
   workspaceVolume:
     emptyDirWorkspaceVolume: {}
-
   containers:
   - name: python
     image: python:3.12
@@ -54,13 +53,17 @@ spec:
                         withCredentials([string(credentialsId: 'github-pat', variable: 'GITHUB_TOKEN')]) {
 
                             sh '''
+                                echo "Git directory:"
+                                ls -la .git
+
                                 git config user.name "jenkins-bot"
                                 git config user.email "jenkins-bot@example.com"
 
+                                git add revenu_disponible_brut.png revenu_disponible_brut.xlsx || true
+                                git commit -m "Mise à jour automatique Jenkins" || echo "Rien à commit"
+
                                 git remote set-url origin https://${GITHUB_TOKEN}@github.com/lesjeanpierz/data-stats-pipeline.git
 
-                                git add revenu_disponible_brut.png revenu_disponible_brut.xlsx || true
-                                git commit -m "Mise à jour automatique" || echo "Rien à commit"
                                 git push origin main
                             '''
                         }
