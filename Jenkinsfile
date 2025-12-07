@@ -17,6 +17,7 @@ spec:
     }
 
     stages {
+
         stage('Clone repository') {
             steps {
                 git branch: 'main',
@@ -29,27 +30,40 @@ spec:
             steps {
                 container('python') {
                     sh '''
-                    pip install pandas openpyxl matplotlib requests
-                    python src/fetch_insee_data.py
+                        pip install pandas openpyxl matplotlib requests
+                        python src/fetch_insee_data.py
                     '''
                 }
             }
         }
 
-        stage('Commit & Push results') {
+        stage('Commit & Push generated files') {
             steps {
-                sh """
-                    git config user.email "jenkins-bot@yourdomain.com"
-                    git config user.name "Jenkins Bot"
+                container('python') {
 
-                    git add revenu_disponible_brut.png revenu_disponible_brut.xlsx
+                    withCredentials([string(credentialsId: 'github-pat', variable: 'GITHUB_TOKEN')]) {
 
-                    git commit -m "Mise à jour automatique des fichiers générés par Jenkins" || echo "Rien à commit"
+                        sh '''
+                            echo "📌 Configuration de Git dans le conteneur"
 
-                    git push origin HEAD:${BRANCH_NAME}
-                """
+                            git config user.name "jenkins-bot"
+                            git config user.email "jenkins-bot@example.com"
+
+                            # On change l'URL du remote pour injecter le token
+                            git remote set-url origin https://${GITHUB_TOKEN}@github.com/lesjeanpierz/data-stats-pipeline.git
+
+                            echo "📌 Ajout des fichiers générés"
+                            git add revenu_disponible_brut.png revenu_disponible_brut.xlsx || true
+
+                            echo "📌 Commit si nécessaire"
+                            git commit -m "Mise à jour automatique des fichiers INSEE" || echo "Rien à commit"
+
+                            echo "📌 Push vers GitHub"
+                            git push origin main
+                        '''
+                    }
+                }
             }
         }
     }
 }
-
